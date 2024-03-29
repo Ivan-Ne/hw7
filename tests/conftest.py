@@ -12,13 +12,16 @@ table_csv_dir = os.path.join(temp_dir, 'table.csv')
 table_xlsx_dir = os.path.join(temp_dir, 'table.xlsx')
 zip_dir = os.path.join(resource_dir, 'newzipfile.zip')
 
+
 @pytest.fixture(scope='session', autouse=True)
 def create_archive():
-    if os.path.exists(zip_dir):
-        pass
-    else:
-        with ZipFile(zip_dir, "a") as myzip:
-            myzip.write(book_pdf_dir, 'book.pdf')
-            myzip.write(table_xlsx_dir, 'table.xlsx')
-            myzip.write(table_csv_dir, 'table.csv')
-            print(myzip.namelist())
+    os.mkdir(resource_dir)
+    with ZipFile(zip_dir, "a") as myzip:
+        myzip.write(book_pdf_dir, 'book.pdf')
+        myzip.write(table_xlsx_dir, 'table.xlsx')
+        myzip.write(table_csv_dir, 'table.csv')
+
+    yield
+
+    os.remove(zip_dir)
+    os.rmdir(resource_dir)
