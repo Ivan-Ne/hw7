@@ -15,7 +15,8 @@ zip_dir = os.path.join(resource_dir, 'newzipfile.zip')
 
 @pytest.fixture(scope='session', autouse=True)
 def create_archive():
-    os.mkdir(resource_dir)
+    if not os.path.exists(resource_dir):
+        os.mkdir(resource_dir)
     with ZipFile(zip_dir, "a") as myzip:
         myzip.write(book_pdf_dir, 'book.pdf')
         myzip.write(table_xlsx_dir, 'table.xlsx')
